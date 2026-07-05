@@ -26,13 +26,13 @@ pnpm lint          # ESLint 검사
 
 Next.js **App Router** + TypeScript(strict) + **Tailwind CSS v4**.
 
-- **데이터 흐름**: `src/data/products.ts`가 `Product` 타입과 6개 상품 배열을 export 하는 단일 진실 공급원(SSOT)이다. 페이지·컴포넌트는 이 배열을 직접 import 해서 렌더링한다. 서버에서 데이터를 가져오지 않으므로 fetch/API 로직이 없다.
+- **데이터 흐름**: `src/data/products.ts`가 `Product` 타입과 8개 패션 상품 배열을 export 하는 단일 진실 공급원(SSOT)이다. 페이지·컴포넌트는 이 배열을 직접 import 해서 렌더링한다. 서버에서 데이터를 가져오지 않으므로 fetch/API 로직이 없다.
 - **라우팅**:
   - `src/app/page.tsx` — 홈(`/`)은 `redirect("/products")`만 수행.
   - `src/app/products/page.tsx` — 상품 목록(그리드).
-  - `src/app/products/[id]/page.tsx` — 상품 상세. `params`는 **Promise 타입**이라 `await params`로 풀어야 한다(Next.js 16). `products.find`로 조회하고 없으면 `notFound()`(404). `generateStaticParams`로 6개 경로를 정적 생성한다.
+  - `src/app/products/[id]/page.tsx` — 상품 상세. `params`는 **Promise 타입**이라 `await params`로 풀어야 한다(Next.js 16). `products.find`로 조회하고 없으면 `notFound()`(404). `generateStaticParams`로 8개 경로를 정적 생성한다.
 - **레이아웃**: `src/app/layout.tsx`가 공통 `Header`를 포함하고 `<html lang="ko">`로 감싼다.
-- **컴포넌트**: `src/components/`의 `ProductCard`(목록 카드, 카드 전체가 상세 링크), `Header`(사이트명 "패캠 스토어" → `/products`).
+- **컴포넌트**: `src/components/`의 `ProductCard`(목록 카드, 카드 전체가 상세 링크), `Header`(사이트명 "ROACH SHOP" → `/products`).
 - **경로 별칭**: `@/*` → `src/*` (tsconfig).
 
 ## 이 코드베이스의 규칙 (PRD 기반)

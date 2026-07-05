@@ -1,0 +1,13 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 300 400" role="img" aria-label="패션 상품 이미지">
+  <defs>
+    <linearGradient id="g" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#C9D4C5"/>
+      <stop offset="100%" stop-color="#DDE6DA"/>
+    </linearGradient>
+  </defs>
+  <rect width="300" height="400" fill="url(#g)"/>
+  <g fill="none" stroke="#5C7256" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" transform="translate(100,140)">
+    <path d="M35 12 L25 24 L30 95 L70 95 L75 24 L65 12 Q58 18 50 18 Q42 18 35 12 Z"/>
+    <path d="M30 50 L70 50"/>
+  </g>
+</svg>

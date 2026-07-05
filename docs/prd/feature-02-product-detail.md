@@ -15,16 +15,18 @@
 ## 4. 화면 / UI
 - 2단 레이아웃(데스크톱): 좌측 상품 이미지, 우측 상품 정보. 모바일에서는 세로 스택.
 - 노출 항목:
+  - **브레드크럼**: `HOME > WOMEN > {상품명}`. `HOME`·`WOMEN` 은 `/products` 링크(`next/link`), 현재 상품명은 비활성 텍스트.
   - 상품 이미지 (`imageUrl`, 크게, `next/image`, `alt`=상품명).
   - 상품명 (`name`, 제목 스타일).
   - 가격 (`price`, `formatPrice`로 `12,000원` 형식, 강조).
   - 상세 설명 (`description`).
+  - **시각용 구매 버튼**: **"장바구니 담기"** / **"바로 구매하기"** (장바구니·결제 기능은 범위 밖이므로 **동작 없음**, 시각만 노출).
 - **"목록으로 돌아가기"** 링크/버튼 → `/products` (`next/link`).
 
 ## 5. 동작 규칙
 - URL 파라미터 `id`로 `products` 배열에서 상품을 찾는다: `products.find(p => p.id === id)`.
 - 해당 `id`의 상품이 **없으면** Next.js `notFound()`를 호출해 404 처리한다.
-- (권장) `generateStaticParams`로 6개 상품 경로를 정적 생성한다.
+- (권장) `generateStaticParams`로 8개 상품 경로를 정적 생성한다.
 
 ## 6. 수용 기준 (Acceptance Criteria)
 - [ ] `/products/1` 접속 시 id가 `1`인 상품의 이미지·이름·가격·설명이 표시된다.

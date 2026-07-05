@@ -45,7 +45,7 @@ Next.js 기반의 간단한 쇼핑몰. 사용자는 **상품 목록을 보고**,
 fastcampus-intro/
 ├── public/
 │   └── images/
-│       ├── product-01.png ~ product-06.png
+│       ├── product-01.svg ~ product-08.svg
 ├── src/
 │   ├── app/
 │   │   ├── layout.tsx              # 루트 레이아웃 (공통 헤더 포함)
@@ -79,29 +79,31 @@ export interface Product {
   id: string;          // 고유 식별자. 라우팅(/products/[id])에 사용
   name: string;        // 상품명
   price: number;       // 가격 (단위: 원, 정수)
-  imageUrl: string;    // 로컬 이미지 경로. 예: "/images/product-01.png"
+  imageUrl: string;    // 로컬 이미지 경로. 예: "/images/product-01.svg"
   description: string; // 상세 설명 (2~4문장)
 }
 
-export const products: Product[] = [ /* 아래 표의 6개 상품 */ ];
+export const products: Product[] = [ /* 아래 표의 8개 상품 */ ];
 ```
 
 ### 규칙
-- `id`는 문자열이며 고유. (예: `"1"` … `"6"`)
+- `id`는 문자열이며 고유. (예: `"1"` … `"8"`)
 - `price`는 정수(원). 화면에서는 `formatPrice`로 `12,000원` 형식 표시.
 - `imageUrl`은 반드시 `/images/`로 시작하는 로컬 경로.
 - `products` 라는 이름의 `Product[]` 배열로 export.
 
-### 샘플 데이터 (6개, 확정)
+### 샘플 데이터 (8개, 확정)
 
 | id | name | price | imageUrl | description(요지) |
 |----|------|-------|----------|-------------------|
-| 1 | 미니멀 화이트 머그컵 | 12000 | /images/product-01.png | 군더더기 없는 300ml 세라믹 머그컵. 전자레인지·식기세척기 사용 가능. |
-| 2 | 원목 도마 세트 | 29000 | /images/product-02.png | 아카시아 원목 대·소 2종 도마 세트. 자연스러운 나뭇결. |
-| 3 | 코튼 캔버스 에코백 | 18000 | /images/product-03.png | 두툼한 12온스 캔버스 데일리 에코백. 안주머니 1개. |
-| 4 | 아로마 소이 캔들 | 22000 | /images/product-04.png | 100% 천연 소이왁스 향초. 은은한 우디 향, 약 40시간 연소. |
-| 5 | 스테인리스 텀블러 500ml | 25000 | /images/product-05.png | 이중 진공 단열. 6시간 보온·12시간 보냉. 누수 방지 뚜껑. |
-| 6 | 리넨 룸슬리퍼 | 15000 | /images/product-06.png | 통기성 좋은 리넨 실내 슬리퍼. 논슬립 밑창. |
+| 1 | 오버핏 울 블렌드 아우터 | 289000 | /images/product-01.svg | 넉넉한 오버핏 울 블렌드 아우터. 자연스러운 핏. |
+| 2 | 하이넥 케이블 니트 | 89000 | /images/product-02.svg | 클래식 케이블 패턴 하이넥 니트. |
+| 3 | 플로럴 롱 원피스 | 159000 | /images/product-03.svg | 은은한 플로럴 롱 원피스. |
+| 4 | 와이드 버튼다운 셔츠 | 79000 | /images/product-04.svg | 여유로운 와이드 핏 버튼다운 셔츠. |
+| 5 | 벨트 트렌치 코트 | 320000 | /images/product-05.svg | 웨이스트 벨트 트렌치 코트. |
+| 6 | 미니멀 크로스백 | 119000 | /images/product-06.svg | 미니멀 라인 크로스백. |
+| 7 | 포인트토 로퍼 | 139000 | /images/product-07.svg | 날렵한 포인트토 로퍼. |
+| 8 | 실크 스카프 랩 | 49000 | /images/product-08.svg | 가벼운 실크 블렌드 스카프. |
 
 > `description`은 위 요지를 바탕으로 2~4문장의 자연스러운 한글 설명으로 완성한다.
 
@@ -111,7 +113,7 @@ export const products: Product[] = [ /* 아래 표의 6개 상품 */ ];
 
 ### 헤더 (`components/Header.tsx`)
 - 모든 페이지 상단에 노출 (`layout.tsx`에 포함).
-- 좌측에 사이트명 텍스트 **"패캠 스토어"**, 클릭 시 `/products`로 이동.
+- 좌측에 사이트명 텍스트 **"ROACH SHOP"**, 클릭 시 `/products`로 이동.
 
 ### 레이아웃
 - 중앙 정렬 컨테이너 (예: `max-w-6xl mx-auto px-4`).
@@ -142,26 +144,19 @@ export function formatPrice(price: number): string {
 
 ---
 
-## 8. 이미지 생성 프롬프트
+## 8. 이미지 생성
 
-아래 프롬프트로 이미지를 생성해 지정 경로에 저장한다. (사용자가 직접 생성)
-공통 스타일: **밝은 배경, 부드러운 자연광, 1:1 정사각형, 제품 중앙 배치, 미니멀 이커머스 제품 사진**.
-
-| 파일 경로 | 상품 | 프롬프트 |
-|-----------|------|----------|
-| `public/images/product-01.png` | 미니멀 화이트 머그컵 | A minimalist white ceramic mug, 300ml, soft neutral background, studio product photography, natural soft light, centered, 1:1 |
-| `public/images/product-02.png` | 원목 도마 세트 | A set of two acacia wood cutting boards showing natural grain, light table, warm soft lighting, top-down, 1:1, minimal e-commerce |
-| `public/images/product-03.png` | 코튼 캔버스 에코백 | A natural beige cotton canvas tote bag, thick 12oz fabric, plain light background, soft studio light, centered, 1:1 |
-| `public/images/product-04.png` | 아로마 소이 캔들 | An aroma soy candle in a frosted glass jar, warm cozy glow, minimal light background, centered, 1:1 |
-| `public/images/product-05.png` | 스테인리스 텀블러 500ml | A sleek stainless steel insulated tumbler with leak-proof lid, matte finish, clean light background, centered, 1:1 |
-| `public/images/product-06.png` | 리넨 룸슬리퍼 | A pair of natural linen indoor slippers with non-slip soles, soft light background, cozy minimal, centered, 1:1 |
+패션 무드의 **단색/그라데이션 placeholder SVG**(8종)를 사용한다. (사용자가 직접 생성)
+- 파일 경로: `public/images/product-01.svg` ~ `product-08.svg` (§4 샘플 데이터와 1:1 대응).
+- 공통 스타일: 1:1 정사각형, 제품 무드에 맞춘 단색 또는 부드러운 그라데이션 배경, 미니멀 이커머스 톤.
+- 실제 제품 사진이 아닌 **placeholder**(레이아웃·비율 확인용)이며, 필요 시 실사 이미지로 교체한다.
 
 ---
 
 ## 9. 완료(Done) 정의
 
 - [ ] Next.js(App Router) + TypeScript + Tailwind 프로젝트가 실행된다.
-- [ ] `src/data/products.ts`에 `Product` 타입과 6개 상품 배열이 존재한다.
+- [ ] `src/data/products.ts`에 `Product` 타입과 8개 상품 배열이 존재한다.
 - [ ] 기능 1(상품 목록) 수용 기준을 모두 만족한다. → `feature-01-product-list.md`
 - [ ] 기능 2(상품 상세) 수용 기준을 모두 만족한다. → `feature-02-product-detail.md`
 - [ ] 가격은 전 화면에서 `formatPrice`로 콤마 포맷 표시된다.

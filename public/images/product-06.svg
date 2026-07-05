@@ -1,0 +1,14 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 300 400" role="img" aria-label="패션 상품 이미지">
+  <defs>
+    <linearGradient id="g" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#BFC9D1"/>
+      <stop offset="100%" stop-color="#D7DEE3"/>
+    </linearGradient>
+  </defs>
+  <rect width="300" height="400" fill="url(#g)"/>
+  <g fill="none" stroke="#4A5A66" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" transform="translate(100,140)">
+    <path d="M18 45 Q18 30 50 30 Q82 30 82 45 L82 88 Q82 95 75 95 L25 95 Q18 95 18 88 Z"/>
+    <path d="M35 30 Q35 14 50 14 Q65 14 65 30"/>
+    <line x1="18" y1="60" x2="82" y2="60"/>
+  </g>
+</svg>

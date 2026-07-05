@@ -3,8 +3,8 @@ import "./globals.css";
 import Header from "@/components/Header";
 
 export const metadata: Metadata = {
-  title: "패캠 스토어",
-  description: "간단한 쇼핑몰 - 상품 목록과 상품 상세 조회",
+  title: "ROACH SHOP",
+  description: "ROACH SHOP — 감각적인 패션을 큐레이션하는 쇼핑몰. 상품 목록과 상세 조회.",
 };
 
 export default function RootLayout({
@@ -14,7 +14,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="ko" className="h-full antialiased">
-      <body className="flex min-h-full flex-col bg-zinc-50 text-zinc-900">
+      <body className="flex min-h-full flex-col bg-white text-neutral-900 antialiased">
         <Header />
         <main className="flex-1">{children}</main>
       </body>

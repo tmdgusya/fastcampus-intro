@@ -1,6 +1,5 @@
 import type { Metadata } from "next";
 import "./globals.css";
-import Header from "@/components/Header";
 
 export const metadata: Metadata = {
   title: "패캠 스토어",
@@ -15,7 +14,6 @@ export default function RootLayout({
   return (
     <html lang="ko" className="h-full antialiased">
       <body className="flex min-h-full flex-col bg-zinc-50 text-zinc-900">
-        <Header />
         <main className="flex-1">{children}</main>
       </body>
     </html>

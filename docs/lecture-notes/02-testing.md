@@ -1,6 +1,6 @@
 # Testing — Vitest
 
-> **이 문서를 읽는 사람**: 개발을 이제 막 시작한 사람. "테스트가 뭔지", "왜 필요한지", "Vitest라는 도구는 어떤 성격인지"만 다룬다. 설치 명령어는 강의 중 프롬프트로 직접 진행한다.
+> **이 문서를 읽는 사람**: 개발을 이제 막 시작한 사람을 위한 문서다. "테스트가 뭔지", "왜 필요한지", "Vitest라는 도구는 어떤 성격인지"를 다룬다.
 
 ---
 
@@ -46,13 +46,13 @@ function formatPrice(n: number) {
 
 ## 다른 도구들과 비교
 
-테스트 도구도 많다. 왜 Vitest를 골랐는지 설명할 수 있어야 한다.
+테스트 도구도 많다. 그런데 왜 Vitest를 쓸까? 대표적인 대안들과 비교해보자.
 
 | 이름 | 뭔가요 | 왜 안 골랐나요 |
 |------|--------|----------------|
 | **Jest(제스트)** | 가장 오래된, 가장 유명한 테스트 도구 | 설정이 까다롭고, TypeScript/ESM과 함께 쓰려면 추가 설정이 많음 |
 | **Vitest** ✅ | Jest와 **사용법이 거의 같은데**, 더 빠르고 설정이 단순 | — |
-| **Playwright / Cypress** | 브라우저에서 클릭하고 스크린샷 찍는 테스트 | **E2E 테스트**용 — 이번 강의 범위보다 큰 주제 |
+| **Playwright / Cypress** | 브라우저에서 클릭하고 스크린샷 찍는 테스트 | **E2E 테스트**용 — 이 문서의 범위보다 큰 주제 |
 | **React Testing Library** | 테스트 도구가 아니라 **DOM 찾는 도우미** | Vitest/Jest 어느 쪽이든 같이 쓰이는 동반자 |
 
 핵심 메시지:
@@ -80,7 +80,7 @@ function formatPrice(n: number) {
      - 빠름, 비용 작음
 ```
 
-이번 강의에서는 **가장 아래 두 층**만 다룬다.
+이 문서에서는 **가장 아래 두 층**만 다룬다.
 
 > 💡 비유: **회사 검사의 비유** —
 > - 단위 테스트 = 각 부품(함수) 검사
@@ -89,7 +89,7 @@ function formatPrice(n: number) {
 
 ---
 
-## Vitest의 핵심 특성 (강의에서 짚을 포인트)
+## Vitest의 핵심 특성
 
 ### 1. 한 테스트는 한 가지만 검사한다
 
@@ -147,10 +147,8 @@ Jest와 비슷하지만, Vitest만의 차별점이 있다:
 | **빠르다** | 내부적으로 Vite/esbuild라는 도구를 써서 코드 변환이 거의 즉시 일어난다 |
 | **TypeScript 기본 지원** | 따로 설정 안 해도 TypeScript 코드를 바로 테스트한다 |
 | **Jest와 사용법이 거의 같다** | 나중에 Jest를 만나도 적응이 빠르다 |
-| **`--ui` 모드** | 브라우저에서 테스트 결과를 그래프로 보여준다. **강의에서 가장 인상적인 장면** |
+| **`--ui` 모드** | 브라우저에서 테스트 결과를 그래프로 보여준다 |
 | **Watch 모드** | 파일을 저장하면 자동으로 테스트가 다시 돌아간다 |
-
-`--ui` 모드를 한 번 보여주면 학생들이 "오~" 한다. 미리 준비해두자.
 
 ---
 
@@ -198,67 +196,6 @@ const button = screen.getByRole('button', { name: '장바구니 담기' })
 
 ---
 
-## 이 프로젝트에서 보여줄 것
-
-이 프로젝트에는 `formatPrice`라는 가격 포맷 함수와 `ProductCard`라는 상품 카드가 있다.
-
-우선순위로 추천:
-
-### 1단계: formatPrice 단위 테스트
-
-가장 단순하고, 테스트가 뭔지 가장 빨리 체감할 수 있다.
-
-```ts
-import { describe, it, expect } from 'vitest'
-import { formatPrice } from './format'
-
-describe('formatPrice', () => {
-  it('12000원을 "12,000원"으로 표시한다', () => {
-    expect(formatPrice(12000)).toBe('12,000원')
-  })
-
-  it('0원을 "0원"으로 표시한다', () => {
-    expect(formatPrice(0)).toBe('0원')
-  })
-
-  it('100만원을 "1,000,000원"으로 표시한다', () => {
-    expect(formatPrice(1000000)).toBe('1,000,000원')
-  })
-})
-```
-
-이걸 보여주면서:
-
-- "**describe** = 관련 테스트 묶음"
-- "**it** = 한 가지 동작"
-- "**expect(...).toBe(...)** = 단언 (이렇게 나와야 한다)"
-
-를 짚어준다.
-
-### 2단계: ProductCard 컴포넌트 테스트
-
-```tsx
-import { render, screen } from '@testing-library/react'
-import { ProductCard } from './ProductCard'
-
-it('상품 카드에 이름과 가격이 보인다', () => {
-  render(<ProductCard product={mockProduct} />)
-
-  expect(screen.getByText('에코 텀블러')).toBeInTheDocument()
-  expect(screen.getByText('12,000원')).toBeInTheDocument()
-})
-```
-
-이걸 보여주면서:
-
-- "**render** = 컴포넌트를 메모리에 그려본다"
-- "**screen.getByText** = 화면에서 이 텍스트를 찾아라 (사용자 관점)"
-- "**toBeInTheDocument** = 이게 화면에 있냐?"
-
-를 짚어준다.
-
----
-
 ## 학생이 꼭 가져갈 인사이트
 
 1. **테스트는 디버깅 도구다.** 작성 중에 버그를 찾는 가장 빠른 방법이다.
@@ -283,11 +220,11 @@ it('상품 카드에 이름과 가격이 보인다', () => {
 
 ---
 
-## 참고 자료 (강의 중 함께 보면 좋은 페이지)
+## 참고 자료
 
 - Vitest 공식 (한국어 번역 자동 지원): https://vitest.dev/guide/
 - Vitest는 왜 빠른가: https://vitest.dev/guide/why.html
 - React Testing Library 가이드: https://testing-library.com/docs/react-testing-library/intro
 - Testing Library의 7가지 원칙: https://testing-library.com/docs/guiding-principles/
 
-> 💡 Tip: 입문자에게 가장 효과적인 자료는 **공식 문서 + 짧은 한국어 유튜브 영상** 조합이다. 강의 후에도 "이 영상 보세요" 한 줄이면 충분.
+> 💡 Tip: 공식 문서가 어렵게 느껴지면, 짧은 한국어 유튜브 영상으로 시작해보자.

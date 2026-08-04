@@ -1,6 +1,6 @@
 # Linter — ESLint
 
-> **이 문서를 읽는 사람**: 개발을 이제 막 시작한 사람. "린터가 뭔지", "왜 필요한지", "어떤 걸 보여주면 좋을지"만 다룬다. 설치 명령어는 강의 중 프롬프트로 직접 진행한다.
+> **이 문서를 읽는 사람**: 개발을 이제 막 시작한 사람을 위한 문서다. "린터가 뭔지", "왜 필요한지", "어떤 것들을 할 수 있는지"를 다룬다.
 
 ---
 
@@ -29,7 +29,7 @@
 
 ## 다른 도구들과 비교
 
-린터는 ESLint만 있는 게 아니다. 강의에서 왜 ESLint를 골랐는지 설명할 수 있어야 한다.
+린터는 ESLint만 있는 게 아니다. 그런데 왜 ESLint를 쓸까? 대표적인 대안들과 비교해보자.
 
 | 이름 | 뭔가요 | 왜 안 골랐나요 |
 |------|--------|----------------|
@@ -41,7 +41,7 @@
 
 ---
 
-## ESLint의 핵심 특성 (강의에서 꼭 짚어줄 것)
+## ESLint의 핵심 특성
 
 ### 1. 실행하지 않고 분석한다
 
@@ -115,37 +115,7 @@ VSCode에서 ESLint 확장이 깔려 있으면:
 
 둘이 같이 있으면 가끔 싸운다 (ESLint가 "세미콜론 있어"라 하고, Prettier가 "없애"라 하면). 그래서 둘을 같이 쓸 때는 규칙을 맞춰줘야 한다.
 
-이번 강의에서는 ESLint만 깔고, Prettier는 일부러 안 깔았다. **"왜 Prettier는 안 깔았는가"** 를 설명할 수 있으면 입문 단계를 잘 넘긴 거다.
-
----
-
-## 이 프로젝트에서 보여줄 것
-
-강의에서 실제로 ESLint가 뭘 잡아내는지 보여주려면, **코드를 일부러 틀려 써보고** ESLint가 잡아내는 장면이 가장 효과적이다.
-
-예를 들어:
-
-```tsx
-// 1) 사용하지 않는 변수 — ESLint가 잡는다
-function ProductCard() {
-  const unused = '이름 안 씀'   // ← 빨간 줄!
-  return <div>상품</div>
-}
-
-// 2) any 타입 — ESLint가 잡는다
-function format(input: any) {   // ← 빨간 줄!
-  return input
-}
-
-// 3) React Hooks 규칙 위반 — eslint-config-next가 잡는다
-function BadComponent() {
-  if (Math.random() > 0.5) {
-    useState()  // ← 조건문 안에서 Hook 사용 금지!
-  }
-}
-```
-
-> 🎯 **강의 포인트**: "**이 빨간 줄 하나가 짠 코드와 깔끔한 코드를 가른다**"라는 인상을 남기자.
+이 문서에서는 ESLint만 다루고, Prettier는 소개만 하고 넘어간다.
 
 ---
 
@@ -159,9 +129,7 @@ function BadComponent() {
 
 ---
 
-## 참고 자료 (강의 중 함께 보면 좋은 페이지)
+## 참고 자료
 
 - ESLint 공식 (한국어 자동 번역 잘 됨): https://eslint.org/docs/latest/use/getting-started
 - Next.js ESLint 가이드: https://nextjs.org/docs/app/api-reference/config/eslint
-
-> 💡 Tip: 입문자에게는 **공식 문서가 어렵게 느껴진다.** 그래서 강의에서는 공식 문서를 1분간 같이 보고, 본문은 한국어 블로그/유튜브로 더 풀어주는 게 효과적이다.

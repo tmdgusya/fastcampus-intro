@@ -20,9 +20,11 @@ pnpm dev           # 개발 서버 (http://localhost:3000)
 pnpm build         # 프로덕션 빌드
 pnpm start         # 빌드 결과 실행
 pnpm lint          # ESLint 검사
+pnpm test          # Vitest 테스트 1회 실행
+pnpm test:watch    # Vitest watch 모드 (파일 저장 시 자동 재실행)
 ```
 
-테스트 프레임워크는 설정되어 있지 않다.
+테스트 프레임워크: **Vitest** (`vitest.config.ts`에서 `@/*` 경로 별칭만 설정됨). 테스트 파일과 테스트 대상 코드는 실습 중에 작성한다.
 
 ## 아키텍처
 

@@ -1,0 +1,103 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1100" height="620" viewBox="0 0 1100 620" font-family="'Noto Sans KR','Apple SD Gothic Neo','Malgun Gothic',sans-serif">
+  <rect width="1100" height="620" fill="#ffffff"/>
+  <text x="40" y="42" font-size="24" font-weight="bold" fill="#24292f">워크플로 파일 안쪽을 뜯어보자</text>
+  <text x="40" y="72" font-size="16" fill="#57606a">YAML이라는 문법으로 쓰여 있다. 문법은 나중에, 먼저 각 부분의 역할만 보자</text>
+
+  <!-- 코드 블록 배경 -->
+  <rect x="40" y="100" width="560" height="500" rx="12" fill="#f6f8fa" stroke="#d0d7de" stroke-width="2"/>
+
+  <!-- 코드 라인 (15px, 줄간 24) -->
+  <g font-family="'SFMono-Regular',Consolas,'Liberation Mono',monospace" font-size="15" fill="#24292f">
+    <text x="60" y="132">name: CI</text>
+    <text x="60" y="156">on:</text>
+    <text x="60" y="180">  push:</text>
+    <text x="60" y="204">    branches: [main]</text>
+    <text x="60" y="228">  pull_request:</text>
+    <text x="60" y="252">jobs:</text>
+    <text x="60" y="276">  lint-and-test:</text>
+    <text x="60" y="300">    runs-on: ubuntu-latest</text>
+    <text x="60" y="324">    steps:</text>
+    <text x="60" y="348">      - uses: actions/checkout@v4</text>
+    <text x="60" y="372">      - uses: pnpm/action-setup@v4</text>
+    <text x="60" y="396">      - uses: actions/setup-node@v4</text>
+    <text x="60" y="420">        with:</text>
+    <text x="60" y="444">          cache: pnpm</text>
+    <text x="60" y="468">      - run: pnpm install</text>
+    <text x="60" y="492">      - run: pnpm lint</text>
+    <text x="60" y="516">      - run: pnpm test</text>
+  </g>
+
+  <!-- 키워드 라인 강조 점 -->
+  <circle cx="24" cy="132" r="6" fill="#57606a"/>
+  <circle cx="24" cy="156" r="6" fill="#0969da"/>
+  <circle cx="24" cy="252" r="6" fill="#8250df"/>
+  <circle cx="24" cy="300" r="6" fill="#9a6700"/>
+  <circle cx="24" cy="348" r="6" fill="#1a7f37"/>
+  <circle cx="24" cy="468" r="6" fill="#cf222e"/>
+
+  <!-- 1. 워크플로 이름 -->
+  <g>
+    <rect x="680" y="109" width="390" height="46" rx="8" fill="#f6f8fa" stroke="#d0d7de" stroke-width="1.5"/>
+    <rect x="680" y="109" width="6" height="46" rx="3" fill="#57606a"/>
+    <text x="700" y="128" font-size="15" font-weight="bold" fill="#24292f">워크플로 이름</text>
+    <text x="700" y="147" font-size="12" fill="#57606a">Actions 탭에 표시되는 이름</text>
+    <path d="M680 132 L608 132" stroke="#57606a" stroke-width="2" fill="none" marker-end="url(#a-gray)"/>
+  </g>
+
+  <!-- 2. 이벤트 -->
+  <g>
+    <rect x="680" y="133" width="390" height="46" rx="8" fill="#f6f8fa" stroke="#d0d7de" stroke-width="1.5"/>
+    <rect x="680" y="133" width="6" height="46" rx="3" fill="#0969da"/>
+    <text x="700" y="152" font-size="15" font-weight="bold" fill="#24292f">언제 실행할까? (이벤트)</text>
+    <text x="700" y="171" font-size="12" fill="#57606a">push·pull_request가 오면 시작</text>
+    <path d="M680 156 L608 156" stroke="#0969da" stroke-width="2" fill="none" marker-end="url(#a-blue)"/>
+  </g>
+
+  <!-- 3. 잡 -->
+  <g>
+    <rect x="680" y="229" width="390" height="46" rx="8" fill="#f6f8fa" stroke="#d0d7de" stroke-width="1.5"/>
+    <rect x="680" y="229" width="6" height="46" rx="3" fill="#8250df"/>
+    <text x="700" y="248" font-size="15" font-weight="bold" fill="#24292f">실행할 일 (잡 · Job)</text>
+    <text x="700" y="267" font-size="12" fill="#57606a">잡 하나가 곧 "검사 1회"</text>
+    <path d="M680 252 L608 252" stroke="#8250df" stroke-width="2" fill="none" marker-end="url(#a-purple)"/>
+  </g>
+
+  <!-- 4. 러너 -->
+  <g>
+    <rect x="680" y="277" width="390" height="46" rx="8" fill="#f6f8fa" stroke="#d0d7de" stroke-width="1.5"/>
+    <rect x="680" y="277" width="6" height="46" rx="3" fill="#9a6700"/>
+    <text x="700" y="296" font-size="15" font-weight="bold" fill="#24292f">어디서 실행? (러너)</text>
+    <text x="700" y="315" font-size="12" fill="#57606a">GitHub이 빌려주는 가상 컴퓨터</text>
+    <path d="M680 300 L608 300" stroke="#9a6700" stroke-width="2" fill="none" marker-end="url(#a-amber)"/>
+  </g>
+
+  <!-- 5. 액션 -->
+  <g>
+    <rect x="680" y="325" width="390" height="46" rx="8" fill="#f6f8fa" stroke="#d0d7de" stroke-width="1.5"/>
+    <rect x="680" y="325" width="6" height="46" rx="3" fill="#1a7f37"/>
+    <text x="700" y="344" font-size="15" font-weight="bold" fill="#24292f">준비된 부품 (액션)</text>
+    <text x="700" y="363" font-size="12" fill="#57606a">GitHub이 미리 만든 자동 부품</text>
+    <path d="M680 348 L608 348" stroke="#1a7f37" stroke-width="2" fill="none" marker-end="url(#a-green)"/>
+  </g>
+
+  <!-- 6. 명령 -->
+  <g>
+    <rect x="680" y="445" width="390" height="46" rx="8" fill="#f6f8fa" stroke="#d0d7de" stroke-width="1.5"/>
+    <rect x="680" y="445" width="6" height="46" rx="3" fill="#cf222e"/>
+    <text x="700" y="464" font-size="15" font-weight="bold" fill="#24292f">직접 실행할 명령</text>
+    <text x="700" y="483" font-size="12" fill="#57606a">터미널에 입력하는 그 명령</text>
+    <path d="M680 468 L608 468" stroke="#cf222e" stroke-width="2" fill="none" marker-end="url(#a-red)"/>
+  </g>
+
+  <!-- 마커 정의 -->
+  <defs>
+    <marker id="a-gray" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0 0 L10 5 L0 10 z" fill="#57606a"/></marker>
+    <marker id="a-blue" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0 0 L10 5 L0 10 z" fill="#0969da"/></marker>
+    <marker id="a-purple" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0 0 L10 5 L0 10 z" fill="#8250df"/></marker>
+    <marker id="a-amber" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0 0 L10 5 L0 10 z" fill="#9a6700"/></marker>
+    <marker id="a-green" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0 0 L10 5 L0 10 z" fill="#1a7f37"/></marker>
+    <marker id="a-red" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0 0 L10 5 L0 10 z" fill="#cf222e"/></marker>
+  </defs>
+
+  <text x="40" y="585" font-size="15" fill="#57606a">정리: 워크플로(파일) → 잡(검사 1회) → 스텝(명령 하나). 잡 안의 스텝들은 위에서 아래로 순서대로 실행된다.</text>
+</svg>

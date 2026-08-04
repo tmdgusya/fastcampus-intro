@@ -1,0 +1,56 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1360" height="310" viewBox="0 0 1360 310" font-family="'Noto Sans KR','Apple SD Gothic Neo','Malgun Gothic',sans-serif">
+  <defs>
+    <marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto">
+      <path d="M0 0 L10 5 L0 10 z" fill="#0969da"/>
+    </marker>
+    <marker id="arrow-green" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto">
+      <path d="M0 0 L10 5 L0 10 z" fill="#1a7f37"/>
+    </marker>
+    <marker id="arrow-red" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto">
+      <path d="M0 0 L10 5 L0 10 z" fill="#cf222e"/>
+    </marker>
+  </defs>
+
+  <rect width="1360" height="310" fill="#ffffff"/>
+  <text x="20" y="42" font-size="24" font-weight="bold" fill="#24292f">코드를 push하면 GitHub이 자동으로 검사한다</text>
+  <text x="20" y="72" font-size="16" fill="#57606a">매번 직접 "린트 돌리고, 테스트 돌리고" 할 필요가 없다</text>
+
+  <!-- ① 코드 수정 -->
+  <rect x="20" y="140" width="230" height="110" rx="12" fill="#f6f8fa" stroke="#d0d7de" stroke-width="2"/>
+  <text x="135" y="183" font-size="20" font-weight="bold" fill="#24292f" text-anchor="middle">① 코드 수정</text>
+  <text x="135" y="216" font-size="15" fill="#57606a" text-anchor="middle">로컬 컴퓨터에서</text>
+
+  <!-- ② git push -->
+  <rect x="300" y="140" width="230" height="110" rx="12" fill="#f6f8fa" stroke="#d0d7de" stroke-width="2"/>
+  <text x="415" y="183" font-size="20" font-weight="bold" fill="#24292f" text-anchor="middle">② git push</text>
+  <text x="415" y="216" font-size="15" fill="#57606a" text-anchor="middle">변경 사항을 GitHub에 전송</text>
+
+  <!-- ③ 워크플로 감지 -->
+  <rect x="580" y="140" width="230" height="110" rx="12" fill="#f6f8fa" stroke="#d0d7de" stroke-width="2"/>
+  <text x="695" y="183" font-size="20" font-weight="bold" fill="#24292f" text-anchor="middle">③ 워크플로 감지</text>
+  <text x="695" y="216" font-size="15" fill="#57606a" text-anchor="middle">.github/workflows/ci.yml</text>
+
+  <!-- ④ GitHub Actions -->
+  <rect x="860" y="140" width="230" height="110" rx="12" fill="#0969da"/>
+  <text x="975" y="183" font-size="20" font-weight="bold" fill="#ffffff" text-anchor="middle">④ GitHub Actions</text>
+  <text x="975" y="216" font-size="15" fill="#c8e1ff" text-anchor="middle">린트 + 테스트 자동 실행</text>
+
+  <!-- ⑤ 성공 -->
+  <rect x="1130" y="70" width="210" height="85" rx="12" fill="#dafbe1" stroke="#1a7f37" stroke-width="2"/>
+  <text x="1235" y="108" font-size="19" font-weight="bold" fill="#1a7f37" text-anchor="middle">⑤ 성공 ✓</text>
+  <text x="1235" y="134" font-size="14" fill="#1a7f37" text-anchor="middle">모든 검사 통과</text>
+
+  <!-- ⑤ 실패 -->
+  <rect x="1130" y="205" width="210" height="85" rx="12" fill="#ffebe9" stroke="#cf222e" stroke-width="2"/>
+  <text x="1235" y="243" font-size="19" font-weight="bold" fill="#cf222e" text-anchor="middle">⑤ 실패 ✗</text>
+  <text x="1235" y="269" font-size="14" fill="#cf222e" text-anchor="middle">로그로 원인 확인</text>
+
+  <!-- 화살표 -->
+  <path d="M250 195 L292 195" stroke="#0969da" stroke-width="4" fill="none" marker-end="url(#arrow)"/>
+  <path d="M530 195 L572 195" stroke="#0969da" stroke-width="4" fill="none" marker-end="url(#arrow)"/>
+  <path d="M810 195 L852 195" stroke="#0969da" stroke-width="4" fill="none" marker-end="url(#arrow)"/>
+  <path d="M1086 168 L1122 130" stroke="#1a7f37" stroke-width="4" fill="none" marker-end="url(#arrow-green)"/>
+  <path d="M1086 208 L1122 246" stroke="#cf222e" stroke-width="4" fill="none" marker-end="url(#arrow-red)"/>
+
+  <text x="271" y="176" font-size="14" fill="#0969da" text-anchor="middle">push</text>
+</svg>

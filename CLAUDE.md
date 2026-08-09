@@ -10,6 +10,23 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 전체 사양은 `docs/prd/`에 정의되어 있다 (`README.md` = 공통 사양, `feature-01-*` = 상품 목록, `feature-02-*` = 상품 상세). 기능을 구현·변경할 때는 해당 PRD의 수용 기준을 기준으로 삼는다. 상품 6종의 이름·가격·설명 요지는 `docs/prd/README.md`의 "샘플 데이터" 표에 확정되어 있으므로 임의로 바꾸지 말 것.
 
+## 브랜치 전략
+
+이 저장소는 다음 세 가지 브랜치로 운영한다.
+
+- **`main`** — 수강생과 함께 시작하는 **스캐폴드**. 상품 구현 코드는 절대 병합하지 않는다. PRD·에셋·공통 설정·문서만 유지한다.
+- **`dev`** — 구현된 기능을 통합하는 브랜치. 모든 `feature/*` 브랜치가 병합되는 곳.
+- **`feature/*`** — 기능 구현 브랜치. **항상 `dev`에서 분기**해 작업하고, 완료되면 `dev`에 병합한다.
+
+### 작업 흐름
+
+1. 작업할 기능은 `dev`에서 `feature/<기능명>` 브랜치를 새로 만든다.
+2. 해당 브랜치에서 구현하고 커밋한다.
+3. PR/병합으로 `dev`에 통합한다.
+4. `main`에는 어떤 구현도 직접 올리지 않는다.
+
+> CI는 `main`, `dev`, `feature/*` 브랜치에서 모두 실행된다 (`.github/workflows/ci.yml`).
+
 ## 명령어
 
 패키지 매니저는 **pnpm**을 사용한다 (`pnpm-lock.yaml`, `pnpm-workspace.yaml` 존재).

@@ -45,3 +45,11 @@ next-env.d.ts
 
 # claude code
 .claude/
+
+# prisma (runtime artifacts)
+generated/
+dev.db
+dev.db-journal
+prisma/dev.db
+test.db
+test.db-journal

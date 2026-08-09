@@ -1,0 +1,18 @@
+generator client {
+  provider = "prisma-client"     // Prisma 7의 ESM 기본 제너레이터 (5/6의 prisma-client-js 와 다름)
+  output   = "../generated/prisma"
+}
+
+datasource db {
+  provider = "sqlite"            // url 은 prisma.config.ts 로!
+}
+
+model Product {
+  id          String   @id
+  name        String
+  price       Int
+  imageUrl    String   @map("image_url")   // 코드는 camelCase, DB 컬럼은 snake_case
+  description String
+
+  @@map("products")              // 모델 Product → 테이블 products
+}

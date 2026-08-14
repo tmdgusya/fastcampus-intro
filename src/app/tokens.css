@@ -1,0 +1,220 @@
+/* ==========================================================================
+   패캠스토어 디자인 토큰 시스템 (Design Tokens)
+   ==========================================================================
+   참고: KRDS 3단계 토큰 구조 + 패스트캠퍼스 브랜드 팔레트 (docs/design-tokens.md)
+   계층: Primitive(@theme) → Semantic(:root/다크) → Component(:root)
+   ========================================================================== */
+
+/* ============================================================
+   1. PRIMITIVE TOKENS — Tailwind @theme
+   @theme 에 등록하면 bg-red-500, text-neutral-900, rounded-md,
+   shadow-md, text-2xs 등 유틸리티 클래스가 자동 생성된다.
+   ============================================================ */
+@theme {
+  /* ---- 브랜드 레드 (1차) ---- */
+  --color-red-50:  #fef2f4;
+  --color-red-100: #fde3e8;
+  --color-red-200: #fbc4cf;
+  --color-red-300: #f79da9;
+  --color-red-400: #f26a7e;
+  --color-red-500: #ed234b;
+  --color-red-600: #d61d42;
+  --color-red-700: #b01736;
+  --color-red-800: #8a122b;
+  --color-red-900: #640d20;
+
+  /* ---- 브랜드 틸/민트 (2차) ---- */
+  --color-teal-50:  #ecfdf9;
+  --color-teal-100: #d3f9ef;
+  --color-teal-200: #a9f2e0;
+  --color-teal-300: #7beacc;
+  --color-teal-400: #63e2c4;
+  --color-teal-500: #50e3c2;
+  --color-teal-600: #2bb69a;
+  --color-teal-700: #1f8f7b;
+  --color-teal-800: #17695b;
+  --color-teal-900: #0f463d;
+
+  /* ---- 액센트 오렌지 ---- */
+  --color-orange-50:  #fff4ec;
+  --color-orange-100: #ffe4d1;
+  --color-orange-200: #ffc9a3;
+  --color-orange-300: #ffab75;
+  --color-orange-400: #ff8d52;
+  --color-orange-500: #ff7450;
+  --color-orange-600: #e85a36;
+  --color-orange-700: #c0452a;
+  --color-orange-800: #993420;
+  --color-orange-900: #6e2417;
+
+  /* ---- 중립 그레이 ---- */
+  --color-neutral-0:   #ffffff;
+  --color-neutral-50:  #f9f9f9;
+  --color-neutral-100: #f2f2f2;
+  --color-neutral-200: #e6e8eb;
+  --color-neutral-300: #d3d3d3;
+  --color-neutral-400: #9b9ba0;
+  --color-neutral-500: #6e6e73;
+  --color-neutral-600: #424242;
+  --color-neutral-700: #282828;
+  --color-neutral-800: #171b1f;
+  --color-neutral-900: #121212;
+
+  /* ---- 상태 색상 ---- */
+  --color-success-500: #1f9d55;
+  --color-warning-500: #f5a623;
+  --color-danger-500:  #e11d48;
+  --color-info-500:    #174fe4;
+
+  /* ---- 간격(Spacing) - 4px 그리드 ----
+     Tailwind v4 는 --spacing(기본 0.25rem)에 숫자를 곱해 유틸리티를 생성한다.
+     즉 p-4 = 1rem(16px) = 설계서의 --space-4. 기본값과 일치하므로 별도 정의 생략. */
+
+  /* ---- 라운드 ---- */
+  --radius-none: 0;
+  --radius-xs:  0.25rem; /* 4px  */
+  --radius-sm:  0.5rem;  /* 8px  */
+  --radius-md:  0.75rem; /* 12px */
+  --radius-lg:  1rem;    /* 16px */
+  --radius-xl:  1.5rem;  /* 24px */
+  --radius-full: 9999px;
+
+  /* ---- 그림자 ---- */
+  --shadow-none: none;
+  --shadow-xs: 0 1px 2px rgb(0 0 0 / 0.05);
+  --shadow-sm: 0 1px 3px rgb(0 0 0 / 0.08), 0 1px 2px rgb(0 0 0 / 0.04);
+  --shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.05);
+  --shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.05);
+  --shadow-xl: 0 20px 25px -5px rgb(0 0 0 / 0.1), 0 8px 10px -6px rgb(0 0 0 / 0.05);
+
+  /* ---- 타이포그래피 : 폰트 패밀리 ---- */
+  --font-sans: "Pretendard Variable", Pretendard, -apple-system, BlinkMacSystemFont,
+    "Segoe UI", Roboto, "Helvetica Neue", "Noto Sans KR", Arial, sans-serif;
+
+  /* ---- 타이포그래피 : 폰트 크기 ---- */
+  --text-2xs:  0.75rem;   /* 12px */
+  --text-xs:   0.8125rem; /* 13px */
+  --text-sm:   0.875rem;  /* 14px */
+  --text-base: 1rem;      /* 16px */
+  --text-md:   1.125rem;  /* 18px */
+  --text-lg:   1.25rem;   /* 20px */
+  --text-xl:   1.5rem;    /* 24px */
+  --text-2xl:  1.875rem;  /* 30px */
+  --text-3xl:  2.25rem;   /* 36px */
+  --text-4xl:  3rem;      /* 48px */
+}
+
+/* ============================================================
+   2. SEMANTIC TOKENS — :root (라이트 기본) / 다크
+   컴포넌트 스타일링은 주로 이 계층을 쓴다.
+   Tailwind 임의값 구문으로 참조: bg-(--color-bg-primary)
+   ============================================================ */
+:root {
+  /* 배경 */
+  --color-bg-primary: #ffffff;
+  --color-bg-surface: #f2f2f2;
+  --color-bg-subtle:  #f9f9f9;
+  --color-bg-brand:   #ed234b;
+
+  /* 텍스트 */
+  --color-text-primary:   #121212;
+  --color-text-secondary: #6e6e73;
+  --color-text-tertiary:  #9b9ba0;
+  --color-text-inverse:   #ffffff;
+  --color-text-brand:     #ed234b;
+  --color-text-on-brand:  #ffffff;
+
+  /* 경계 */
+  --color-border-default: #d3d3d3;
+  --color-border-strong:  #9b9ba0;
+  --color-border-brand:   #ed234b;
+  --color-border-focus:   #174fe4;
+
+  /* 브랜드 */
+  --color-brand-primary:   #ed234b;
+  --color-brand-secondary: #50e3c2;
+  --color-accent:          #ff7450;
+
+  /* 상태 */
+  --color-success: #1f9d55;
+  --color-warning: #f5a623;
+  --color-danger:  #e11d48;
+  --color-info:    #174fe4;
+
+  /* 링(Ring) - 접근성 포커스 */
+  --ring-width:  2px;
+  --ring-offset: 2px;
+
+  /* ---- 타이포그래피 : semantic 텍스트 스타일 (설계서 §5-3) ----
+     size / weight / line-height 를 font 단축표기로 묶은 의미 토큰.
+     사용 예: font: var(--text-price);
+     (현재 컴포넌트는 Tailwind 유틸리티로 동일 스펙을 구현하므로 참조용 SSOT) */
+  --text-display:  700 2.25rem/1.25 var(--font-sans);   /* 3xl bold tight        */
+  --text-h1:       700 1.875rem/1.25 var(--font-sans);  /* 2xl bold tight        */
+  --text-h2:       700 1.5rem/1.25 var(--font-sans);    /* xl bold tight         */
+  --text-h3:       600 1.125rem/1.5 var(--font-sans);   /* md semibold normal    */
+  --text-body-lg:  400 1rem/1.75 var(--font-sans);      /* base regular relaxed  */
+  --text-body:     400 0.875rem/1.5 var(--font-sans);   /* sm regular normal     */
+  --text-body-sm:  400 0.8125rem/1.5 var(--font-sans);  /* xs regular normal     */
+  --text-caption:  500 0.75rem/1.5 var(--font-sans);    /* 2xs medium normal     */
+  --text-price:    700 1.125rem/1.25 var(--font-sans);  /* md bold tight (가격)  */
+  --text-button:   600 0.875rem/1.5 var(--font-sans);   /* sm semibold normal    */
+  --text-link:     500 0.875rem/1.5 var(--font-sans);   /* sm medium normal      */
+}
+
+/* 다크 모드 : 시맨틱 값만 교체 (토큰 이름은 유지) */
+@media (prefers-color-scheme: dark) {
+  :root {
+    --color-bg-primary: #121212;
+    --color-bg-surface: #171b1f;
+    --color-bg-subtle:  #1f2428;
+    --color-bg-brand:   #ed234b;
+
+    --color-text-primary:   #ededed;
+    --color-text-secondary: #9b9ba0;
+    --color-text-tertiary:  #6e6e73;
+    --color-text-inverse:   #121212;
+    --color-text-brand:     #f26a7e;
+    --color-text-on-brand:  #ffffff;
+
+    --color-border-default: #424242;
+    --color-border-strong:  #9b9ba0;
+    --color-border-brand:   #f26a7e;
+    --color-border-focus:   #7da2ff;
+
+    --color-brand-primary:   #f26a7e;
+    --color-brand-secondary: #63e2c4;
+    --color-accent:          #ff8d52;
+
+    --color-success: #4cc38a;
+    --color-warning: #ffc46b;
+    --color-danger:  #f4526f;
+    --color-info:    #7da2ff;
+  }
+}
+
+/* ============================================================
+   3. COMPONENT TOKENS — 컴포넌트별 파생 토큰 (semantic 참조)
+   컴포넌트 구현 시 사용하기 위한 예약 계약. 미사용 변수는 무해하다.
+   (Header / ProductCard / 버튼 등)
+   ============================================================ */
+:root {
+  /* 버튼 (Primary) */
+  --btn-primary-bg:        var(--color-brand-primary);
+  --btn-primary-bg-hover:  #d61d42;
+  --btn-primary-bg-active: #b01736;
+  --btn-primary-text:      var(--color-text-on-brand);
+  --btn-primary-focus:     var(--color-border-focus);
+
+  /* 상품 카드 */
+  --card-bg:        var(--color-bg-primary);
+  --card-border:    var(--color-border-default);
+  --card-shadow:    var(--shadow-md);
+  --card-name:      var(--color-text-primary);
+  --card-price:     var(--color-text-primary);
+  --card-image-bg:  var(--color-bg-surface);
+
+  /* 헤더 */
+  --header-bg:         var(--color-bg-primary);
+  --header-brand-text: var(--color-text-primary);
+}

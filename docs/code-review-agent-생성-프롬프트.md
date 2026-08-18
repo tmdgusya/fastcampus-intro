@@ -29,8 +29,8 @@
 | 라벨 | 색 | 뜻 |
 |---|---|---|
 | `status: needs-triage` | `#E4A11B` | 새 이슈 접수 — Planner 차례 |
-| `agent: ready` | `#1D76DB` | 다듬기 완료 — 구현 루프 출발 |
-| `status: in-progress` | `#0E8A16` | 구현 루프 작업 중 (반려 시 되돌아오는 곳) |
+| `agent: ready` | `#1D76DB` | 다듬기 완료·반려 복귀 — 구현 루프 출발 |
+| `status: in-progress` | `#0E8A16` | 구현 루프 작업 중 |
 | `status: in-review` | `#5319E7` | **PR 올라감 — 코드 리뷰 검문소 근무 시간** |
 | `status: in-security` | `#B60205` | 코드 리뷰 통과 — 보안 검수 대기 |
 | `status: in-qa` | `#D93F0B` | 보안 통과 — QA 검문 대기 |
@@ -61,7 +61,7 @@ QA가 "하기로 한 일을 했나"를 본다면, 코드 리뷰어는 "이 코�
 - frontmatter
   - name: code-reviewer
   - description: "status: in-review 라벨이 붙은 이슈의 PR에서 코드 품질(로직·버그·프로젝트 규칙)을
-    검토하고, 통과 시 status: in-security로 넘기며 반려 시 status: in-progress로 교체하는 코드 리뷰어 에이전트.
+    검토하고, 통과 시 status: in-security로 넘기며 반려 시 agent: ready로 교체하는 코드 리뷰어 에이전트.
     PR이 올라오면 호출한다."
   - tools: Read, Grep, Glob, Bash  (파일 수정 도구는 주지 않는다 — 리뷰어는 검사만 하고 코드는 고치지 않는다)
 
@@ -89,7 +89,7 @@ QA가 "하기로 한 일을 했나"를 본다면, 코드 리뷰어는 "이 코�
    - 반려: 고칠 목록을 남긴다. 각 항목은 심각도(🔴 치명 / 🟠 중요 / 🟡 사소) + 근거 파일:줄 +
      왜 문제인지 한 문장 + 어떻게 고치는지 한 문장.
      신호를 되돌린다, 반드시 한 명령으로:
-     gh issue edit <번호> --add-label "status: in-progress" --remove-label "status: in-review"
+     gh issue edit <번호> --add-label "agent: ready" --remove-label "status: in-review"
    - 코멘트는 적을수록 좋다. 확신 있는 결함만 말하고, 취향(네이밍 스타일, 줄바꿈 위치 같은 것)은
      🟡 사소로도 달지 않는다 — 취향은 반려 사유가 될 수 없다.
 6. 요약 보고 — 이슈 번호, PR 번호, 판정(통과/반려), 발견한 결함 목록(심각도순)을 한 줄씩 요약해 돌려준다.
@@ -112,5 +112,5 @@ QA가 "하기로 한 일을 했나"를 본다면, 코드 리뷰어는 "이 코�
    - 가격을 `price.toString() + "원"`처럼 직접 포맷하기 (`formatPrice()`를 안 씀)
 3. Claude Code에서 "code-reviewer로 이슈 #<번호> 검토해 줘"라고 시킵니다.
 4. 결과가 이렇게 바뀌었으면 성공입니다:
-   - **반려 경로**: PR에 🔴/🟠 심각도 + `파일:줄` 근거가 붙은 고칠 목록 댓글이 달리고, 라벨이 `status: in-review` → `status: in-progress`로 교체됨 (진행 신호는 여전히 하나)
+   - **반려 경로**: PR에 🔴/🟠 심각도 + `파일:줄` 근거가 붙은 고칠 목록 댓글이 달리고, 라벨이 `status: in-review` → `agent: ready`로 교체됨 (진행 신호는 여전히 하나) — 구현 루프가 반려 댓글을 읽고 수정하게 됩니다
    - **통과 경로**(고친 뒤 다시 검토): PR에 "무엇을 검사했는지" 요약 댓글이 달리고, 라벨이 `status: in-review` → `status: in-security`로 교체됨 — 다음은 보안 검수·QA 차례, 그 다음 제가 승인하면 됩니다

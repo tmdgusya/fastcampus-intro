@@ -30,8 +30,8 @@
 | 라벨 | 색 | 뜻 |
 |---|---|---|
 | `status: needs-triage` | `#E4A11B` | 새 이슈 접수 — Planner 차례 |
-| `agent: ready` | `#1D76DB` | 다듬기 완료 — 구현 루프 출발 |
-| `status: in-progress` | `#0E8A16` | 구현 루프 작업 중 (반려 시 되돌아오는 곳) |
+| `agent: ready` | `#1D76DB` | 다듬기 완료·반려 복귀 — 구현 루프 출발 |
+| `status: in-progress` | `#0E8A16` | 구현 루프 작업 중 |
 | `status: in-review` | `#5319E7` | PR 올라감 — 코드 리뷰 대기 |
 | `status: in-security` | `#B60205` | **코드 리뷰 통과 — 보안 검문소 근무 시간** |
 | `status: in-qa` | `#D93F0B` | 보안 통과 — QA 검문 대기 |
@@ -63,7 +63,7 @@ QA는 완료 조건을, 코드 리뷰어는 코드 품질을 보고, 보안 검�
 - frontmatter
   - name: security
   - description: "status: in-security 라벨이 붙은 이슈의 PR에서 보안 취약점(시크릿 노출·위험한 의존성·
-    인젝션 등)을 점검하고, 통과 시 status: in-qa로 넘기며 반려 시 status: in-progress로 교체하는 보안 검수 에이전트.
+    인젝션 등)을 점검하고, 통과 시 status: in-qa로 넘기며 반려 시 agent: ready로 교체하는 보안 검수 에이전트.
     코드 리뷰를 통과한 PR이 도착하면 호출한다."
   - tools: Read, Grep, Glob, Bash  (파일 수정 도구는 주지 않는다 — 검수원은 검사만 하고 코드는 고치지 않는다)
 
@@ -98,7 +98,7 @@ QA는 완료 조건을, 코드 리뷰어는 코드 품질을 보고, 보안 검�
      시크릿(S1)을 발견했으면 특별히 안내한다: 코드에서 지우는 것만으로 끝이 아니라 — 커밋 히스토리에
      남았으므로 키를 폐기·재발급해야 한다고 댓글에 적는다.
      신호를 되돌린다, 반드시 한 명령으로:
-     gh issue edit <번호> --add-label "status: in-progress" --remove-label "status: in-security"
+     gh issue edit <번호> --add-label "agent: ready" --remove-label "status: in-security"
 6. 요약 보고 — 이슈 번호, PR 번호, 판정(통과/반려), 점검한 일곱 가지 결과를 한 줄씩 요약해 돌려준다.
 
 # 금지 사항 (본문에 분명하게 적어 줘)
@@ -121,5 +121,5 @@ QA는 완료 조건을, 코드 리뷰어는 코드 품질을 보고, 보안 검�
    - `dangerouslySetInnerHTML`에 외부 데이터 통째로 넣기
 3. Claude Code에서 "security로 이슈 #<번호> 점검해 줘"라고 시킵니다.
 4. 결과가 이렇게 바뀌었으면 성공입니다:
-   - **반려 경로**: PR에 🔴 치명 + `파일:줄` + 악용 시나리오가 붙은 고칠 목록 댓글이 달리고(시크릿이면 폐기·재발급 안내까지), 라벨이 `status: in-security` → `status: in-progress`로 교체됨 (진행 신호는 여전히 하나)
+   - **반려 경로**: PR에 🔴 치명 + `파일:줄` + 악용 시나리오가 붙은 고칠 목록 댓글이 달리고(시크릿이면 폐기·재발급 안내까지), 라벨이 `status: in-security` → `agent: ready`로 교체됨 (진행 신호는 여전히 하나) — 구현 루프가 반려 댓글을 읽고 수정하게 됩니다
    - **통과 경로**(고친 뒤 다시 점검): PR에 점검 요약 댓글이 달리고, 라벨이 `status: in-security` → `status: in-qa`로 교체됨 — 다음은 QA 차례, 그 다음 제가 승인하면 됩니다

@@ -21,8 +21,8 @@ diff를 읽는 것은 "코드가 그렇게 **쓰였는지**"까지밖에 확인�
 | 라벨 | 색 | 뜻 |
 |---|---|---|
 | `status: needs-triage` | `#E4A11B` | 새 이슈 접수 — Planner 차례 |
-| `agent: ready` | `#1D76DB` | 다듬기 완료 — 구현 루프 출발 |
-| `status: in-progress` | `#0E8A16` | 구현 루프 작업 중 (반려 시 되돌아오는 곳) |
+| `agent: ready` | `#1D76DB` | 다듬기 완료·반려 복귀 — 구현 루프 출발 |
+| `status: in-progress` | `#0E8A16` | 구현 루프 작업 중 |
 | `status: in-review` | `#5319E7` | PR 올라감 — 코드 리뷰 대기 |
 | `status: in-security` | `#B60205` | 코드 리뷰 통과 — 보안 검수 대기 |
 | `status: in-qa` | `#D93F0B` | **보안 통과 — QA 검문소 근무 시간** |
@@ -53,7 +53,7 @@ QA는 작업 과정에 전혀 참여하지 않았고, 작업자의 사정도 일
   - name: qa
   - description: "status: in-qa 라벨이 붙은 이슈를 찾아 PR 작업물을 완료 조건 기준으로 검증하고,
     화면이 바뀌는 PR은 agent-browser로 실제 렌더링된 화면까지 확인하며,
-    통과 시 status: awaiting-approval로, 반려 시 status: in-progress로 교체하는 QA 에이전트.
+    통과 시 status: awaiting-approval로, 반려 시 agent: ready로 교체하는 QA 에이전트.
     코드 리뷰·보안 검수를 통과한 PR이 도착하면 호출한다."
   - tools: Read, Grep, Glob, Bash  (파일 수정 도구는 주지 않는다 — QA는 검사만 하고 코드는 고치지 않는다.
     agent-browser는 Bash 안에서 구동되는 CLI라 이 목록에 그대로 포함된다)
@@ -88,7 +88,7 @@ QA는 작업 과정에 전혀 참여하지 않았고, 작업자의 사정도 일
      반드시 한 명령으로: gh issue edit <번호> --add-label "status: awaiting-approval" --remove-label "status: in-qa"
      머지와 승인은 내 자리다.
    - 반려: PR에 고칠 목록을 구체적으로 남기고, 신호를 되돌린다.
-     반드시 한 명령으로: gh issue edit <번호> --add-label "status: in-progress" --remove-label "status: in-qa"
+     반드시 한 명령으로: gh issue edit <번호> --add-label "agent: ready" --remove-label "status: in-qa"
 7. 요약 보고 — 이슈 번호, PR 번호, 판정(통과/반려), 검사한 세 가지 결과와 화면 검사 결과(확인한 경로 포함)를 한 줄씩 요약해 돌려준다.
 
 # 금지 사항 (본문에 분명하게 적어 줘)
@@ -112,6 +112,6 @@ QA는 작업 과정에 전혀 참여하지 않았고, 작업자의 사정도 일
    - 상품 이미지 경로를 `/images/product-99.png`처럼 오타 내기 — 페이지를 열어야 깨진 이미지가 드러납니다
 3. Claude Code에서 "qa로 이슈 #<번호> 검수해 줘"라고 시킵니다.
 4. 결과가 이렇게 바뀌었으면 성공입니다:
-   - **반려 경로**: PR에 고칠 목록 댓글이 달리고(화면 결함이면 스크린샷에서 무엇을 봤는지 언급), 라벨이 `status: in-qa` → `status: in-progress`로 교체됨 (진행 신호는 여전히 하나)
+   - **반려 경로**: PR에 고칠 목록 댓글이 달리고(화면 결함이면 스크린샷에서 무엇을 봤는지 언급), 라벨이 `status: in-qa` → `agent: ready`로 교체됨 (진행 신호는 여전히 하나) — 구현 루프가 반려 댓글을 읽고 수정하게 됩니다
    - **통과 경로**(고친 뒤 다시 검수): PR에 검사 요약 댓글이 달리고, 라벨이 `status: in-qa` → `status: awaiting-approval`로 교체됨 — 이제 제가 승인하면 됩니다.
    - **정리 확인**: 검사가 끝난 뒤 브라우저 세션과 dev 서버가 살아 있지 않은지 확인합니다 (`agent-browser session list`, `lsof -i :3000`).

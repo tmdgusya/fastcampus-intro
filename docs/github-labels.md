@@ -15,7 +15,7 @@
 | 라벨 | 색 | 뜻 | 붙이는 주체 |
 |---|---|---|---|
 | `status: needs-triage` | 🟡 `#E4A11B` | 새 이슈 접수됨 — Planner가 다듬을 차례 | 나 (이슈를 적을 때) |
-| `agent: ready` | 🔵 `#1D76DB` | 다듬기 완료 — 구현 루프 출발 신호 | Planner 루프 |
+| `agent: ready` | 🔵 `#1D76DB` | 다듬기 완료·반려 복귀 — 구현 루프 출발 신호 | Planner 루프 · 검문소(반려 시) |
 | `status: in-progress` | 🟢 `#0E8A16` | 구현 루프가 작업 중 | 구현 루프 |
 | `status: in-review` | 🟣 `#5319E7` | PR 올라감 — **코드 리뷰** 대기 | 구현 루프 |
 | `status: in-security` | 🔴 `#B60205` | 코드 리뷰 통과 — **보안 검수** 대기 | 코드 리뷰어 (통과 시) |
@@ -55,7 +55,7 @@
                             코드 리뷰어: in-review 통과 시      status: in-security
                             보안 검수원: in-security 통과 시   status: in-qa
                             QA: in-qa 통과 시                   status: awaiting-approval
-                            어느 검문소에서 반려되든           status: in-progress 로 되돌아감
+                            어느 검문소에서 반려되든           agent: ready 로 되돌아감
         ↓
 ⑤ 내가 승인             →  머지,  awaiting-approval 떼고  status: done  붙임, 이슈 닫기
 ```
@@ -64,9 +64,10 @@
 
 - **Planner 루프**는 `status: needs-triage`를 봅니다 → 이슈를 다듬고 `agent: ready`로 바꿔 붙입니다.
 - **구현 루프**는 `agent: ready`를 봅니다 → 작업을 시작하고 `status: in-progress`, PR을 올리면 `status: in-review`.
-- **코드 리뷰어**는 `status: in-review`를 봅니다 → 통과하면 `status: in-security`, 반려하면 `status: in-progress`.
-- **보안 검수원**은 `status: in-security`를 봅니다 → 통과하면 `status: in-qa`, 반려하면 `status: in-progress`.
-- **QA**는 `status: in-qa`를 봅니다 → 통과하면 `status: awaiting-approval`, 반려하면 `status: in-progress`.
+  연결된 PR이 이미 있는 `agent: ready`는 새 작업이 아니라 **반려 수정**이다 — PR의 반려 댓글부터 읽고 수정해 다시 올린다.
+- **코드 리뷰어**는 `status: in-review`를 봅니다 → 통과하면 `status: in-security`, 반려하면 `agent: ready`.
+- **보안 검수원**은 `status: in-security`를 봅니다 → 통과하면 `status: in-qa`, 반려하면 `agent: ready`.
+- **QA**는 `status: in-qa`를 봅니다 → 통과하면 `status: awaiting-approval`, 반려하면 `agent: ready`.
 - **나(사장)** 는 `status: awaiting-approval`을 봅니다 → PR을 확인하고 승인, `status: done`으로 마무리합니다.
 
 ### ⚠️ 약속 하나 — 진행 신호는 한 이슈에 딱 하나만
@@ -90,11 +91,17 @@ gh issue edit 12 --add-label "agent: ready" --remove-label "status: needs-triage
 - 리뷰·보안의 반려 지적은 "코드를 다시 쓰게 만드는" 것들입니다.
   코드가 바뀔 수 있는 동안은 비싼 게이트로 보내지 않는 것입니다.
 
-여기서 나오는 규칙 두 가지:
+여기서 나오는 규칙 세 가지:
 
-1. **반려는 언제나 `status: in-progress`로 돌아갑니다.**
+1. **반려는 언제나 `agent: ready`로 돌아갑니다.**
    어떤 검문소의 반려든 똑같습니다. QA가 반렸다고 바로 앞 검문소로 되돌리는 간선은 없습니다.
-2. **다시 올라온 PR은 `status: in-review`부터 전 검문소를 다시 통과합니다.**
+   `status: in-progress`는 구현 루프가 **스스로 붙이는** "작업 중" 표시일 뿐 다시 집을 대기열이 아닙니다 —
+   에이전트 루프는 매번 새 컨텍스트로 돌기 때문에 in-progress를 줍는 순간 이중 픽업(중복 출발)이 생깁니다.
+   반려된 이슈의 실제 상태는 "구현자가 다시 집어가기를 기다리는 중"이므로, 출발 신호인 `agent: ready`가 정확합니다.
+2. **반려 복귀는 Planner를 다시 거치지 않습니다.**
+   다듬기는 이미 끝났고, 고칠 목록은 PR의 반려 댓글에 있습니다. 구현 루프는 연결된 PR이 있는
+   `agent: ready`를 반려 수정으로 취급해 반려 댓글부터 읽고 수정해 다시 올립니다.
+3. **다시 올라온 PR은 `status: in-review`부터 전 검문소를 다시 통과합니다.**
    QA 반려 후의 자잘한 수정도 코드가 바뀐 이상 리뷰를 다시 받습니다.
    수정이 작으면 리뷰도 빨리 끝나므로 비용 걱정이 없고, "이 수정은 어디까지 재검해야 하나"라는
    회색 지대가 아예 생기지 않습니다.

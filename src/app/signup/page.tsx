@@ -92,7 +92,7 @@ export default function SignupPage() {
               placeholder={`${PASSWORD_MIN_LENGTH}자 이상`}
               className="mt-2 w-full rounded-sm border border-(--color-border-default) bg-(--color-bg-primary) px-4 py-3 text-base text-(--color-text-primary) placeholder:text-(--color-text-tertiary) focus:border-(--color-border-brand)"
             />
-            <p className="mt-2 text-2xs text-(--color-text-tertiary)">
+            <p className="mt-2 text-2xs text-(--color-text-secondary)">
               비밀번호는 {PASSWORD_MIN_LENGTH}자 이상 입력해 주세요.
             </p>
           </div>

@@ -44,7 +44,9 @@ next-env.d.ts
 .glm-hammer/
 
 # claude code
-.claude/
+# .claude/ 아래는 기본 무시하되, 저장소로 공유하는 subagent(검증 루프)만 추적한다
+.claude/*
+!.claude/agents/
 
 # prisma (runtime artifacts)
 generated/

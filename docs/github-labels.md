@@ -1,14 +1,14 @@
 # GitHub 이슈 라벨 — 우리 저장소의 신호등
 
 이슈에 붙는 라벨은 **에이전트가 읽는 신호등**입니다. "이 이슈를 누가, 언제 가져가는가"를
-색과 이름으로 정해 둔 약속이며, Planner 루프와 구현 루프는 이 라벨만 보고 자기 일을 찾습니다.
+색과 이름으로 정해 둔 약속이며, Planner 루프·구현 루프·검증 루프의 검문소들은 이 라벨만 보고 자기 일을 찾습니다.
 
 > 출처: 패스트캠퍼스 Part 7 · CH02-01 "Github Label 설명 및 설정".
 > 라벨을 바꾸고 싶다면 이 문서도 함께 고치세요. **이 문서가 라벨 체계의 단일 진실 공급원(SSOT)입니다.**
 
 ---
 
-## 한눈에 보기 — 진행 신호 5개 + 종류 스티커 3개
+## 한눈에 보기 — 진행 신호 8개 + 종류 스티커 3개
 
 ### 진행 신호 (status) — 이슈의 진행 상황
 
@@ -17,7 +17,10 @@
 | `status: needs-triage` | 🟡 `#E4A11B` | 새 이슈 접수됨 — Planner가 다듬을 차례 | 나 (이슈를 적을 때) |
 | `agent: ready` | 🔵 `#1D76DB` | 다듬기 완료 — 구현 루프 출발 신호 | Planner 루프 |
 | `status: in-progress` | 🟢 `#0E8A16` | 구현 루프가 작업 중 | 구현 루프 |
-| `status: in-review` | 🟣 `#5319E7` | PR 올라감 — 검증·승인 대기 | 구현 루프 |
+| `status: in-review` | 🟣 `#5319E7` | PR 올라감 — **코드 리뷰** 대기 | 구현 루프 |
+| `status: in-security` | 🔴 `#B60205` | 코드 리뷰 통과 — **보안 검수** 대기 | 코드 리뷰어 (통과 시) |
+| `status: in-qa` | 🟠 `#D93F0B` | 보안 검수 통과 — **QA 검문** 대기 | 보안 검수원 (통과 시) |
+| `status: awaiting-approval` | 🔷 `#00B8D9` | 검증 루프 전원 통과 — 내 승인 대기 | QA (통과 시) |
 | `status: done` | ⚪ `#6B7280` | 머지 완료 — 끝 | 나 (승인할 때) |
 
 핵심 신호는 **`agent: ready`** — 이 파란 신호가 켜져야 구현 루프가 출발합니다.
@@ -48,16 +51,23 @@
                             ready 떼고  status: in-progress  붙임
                             PR을 올리면  in-progress 떼고  status: in-review
         ↓
-④ 검증 루프             →  QA·보안·리뷰 검문소 (PR 검사)
+④ 검증 루프 — 검문소 셋이 한 방향으로만 흐른다 (코드 리뷰 → 보안 → QA)
+                            코드 리뷰어: in-review 통과 시      status: in-security
+                            보안 검수원: in-security 통과 시   status: in-qa
+                            QA: in-qa 통과 시                   status: awaiting-approval
+                            어느 검문소에서 반려되든           status: in-progress 로 되돌아감
         ↓
-⑤ 내가 승인             →  머지,  in-review 떼고  status: done  붙임, 이슈 닫기
+⑤ 내가 승인             →  머지,  awaiting-approval 떼고  status: done  붙임, 이슈 닫기
 ```
 
 각 루프가 **어떤 라벨을 보는지**:
 
 - **Planner 루프**는 `status: needs-triage`를 봅니다 → 이슈를 다듬고 `agent: ready`로 바꿔 붙입니다.
-- **구현 루프**는 `agent: ready`를 봅니다 → 작업을 시작하고 `status: in-progress`, 끝나면 `status: in-review`.
-- **나(사장)** 는 `status: in-review`를 봅니다 → PR을 확인하고 승인, `status: done`으로 마무리합니다.
+- **구현 루프**는 `agent: ready`를 봅니다 → 작업을 시작하고 `status: in-progress`, PR을 올리면 `status: in-review`.
+- **코드 리뷰어**는 `status: in-review`를 봅니다 → 통과하면 `status: in-security`, 반려하면 `status: in-progress`.
+- **보안 검수원**은 `status: in-security`를 봅니다 → 통과하면 `status: in-qa`, 반려하면 `status: in-progress`.
+- **QA**는 `status: in-qa`를 봅니다 → 통과하면 `status: awaiting-approval`, 반려하면 `status: in-progress`.
+- **나(사장)** 는 `status: awaiting-approval`을 봅니다 → PR을 확인하고 승인, `status: done`으로 마무리합니다.
 
 ### ⚠️ 약속 하나 — 진행 신호는 한 이슈에 딱 하나만
 
@@ -70,6 +80,25 @@
 gh issue edit 12 --add-label "agent: ready" --remove-label "status: needs-triage"
 ```
 
+### ⚠️ 약속 둘 — 검증은 한 방향으로만 흐른다
+
+검문소는 **코드 리뷰 → 보안 → QA** 순서로만 지나갑니다. 뒤로 거슬러 올라가는 간선은 없습니다.
+이 순서에는 이유가 있습니다.
+
+- QA의 눈 검사(브라우저 띄우기·스크린샷·대조)는 검증 절차 중 **가장 비쌉니다.**
+  코드 리뷰로 뒤집힐 것이 뻔한 PR에 미리 돌리면 그 비용이 전부 낭비됩니다.
+- 리뷰·보안의 반려 지적은 "코드를 다시 쓰게 만드는" 것들입니다.
+  코드가 바뀔 수 있는 동안은 비싼 게이트로 보내지 않는 것입니다.
+
+여기서 나오는 규칙 두 가지:
+
+1. **반려는 언제나 `status: in-progress`로 돌아갑니다.**
+   어떤 검문소의 반려든 똑같습니다. QA가 반렸다고 바로 앞 검문소로 되돌리는 간선은 없습니다.
+2. **다시 올라온 PR은 `status: in-review`부터 전 검문소를 다시 통과합니다.**
+   QA 반려 후의 자잘한 수정도 코드가 바뀐 이상 리뷰를 다시 받습니다.
+   수정이 작으면 리뷰도 빨리 끝나므로 비용 걱정이 없고, "이 수정은 어디까지 재검해야 하나"라는
+   회색 지대가 아예 생기지 않습니다.
+
 ---
 
 ## 이름 규칙
@@ -78,7 +107,7 @@ gh issue edit 12 --add-label "agent: ready" --remove-label "status: needs-triage
 2. **같은 묶음은 같은 접두어** — 진행 상황은 `status:`, 종류는 `type:`.
    (`agent: ready`는 "에이전트가 출발해도 된다"는 전용 신호라 `agent:` 접두어를 씁니다.)
 3. **설명을 꼭 적습니다** — "이 라벨을 붙이면 무슨 일이 일어나는가" 한 줄. 사람과 에이전트 모두가 읽는 약속입니다.
-4. **색은 신호의 언어** — 노랑=대기 · 파랑=출발 · 초록=작업 중 · 보라=검토 · 회색=끝. 색만 봐도 진행 상황이 읽힙니다.
+4. **색은 신호의 언어** — 노랑=접수 · 파랑=출발 · 초록=작업 중 · 보라=코드 리뷰 · 적갈색=보안 · 주황=QA · 하늘색=승인 대기 · 회색=끝. 색만 봐도 진행 상황이 읽힙니다.
 5. **적게 시작합니다** — 부족하면 그때 더합니다. 새 라벨 = 새 신호이므로 반드시 이 문서에 먼저 추가하세요.
 
 ---
@@ -104,9 +133,12 @@ gh label create "이름" --color 6자리HEX --description "한 줄 설명"
 GitHub 웹 검색창에서는 `label:` 필터를 씁니다. **공백이 있는 라벨은 따옴표로**:
 
 ```text
-label:"agent: ready"            → 구현 루프 출발 대기열
-label:"status: in-review"       → 내 승인 대기열
-label:"type: bug"               → 버그만
+label:"agent: ready"                → 구현 루프 출발 대기열
+label:"status: in-review"           → 코드 리뷰 대기열
+label:"status: in-security"         → 보안 검수 대기열
+label:"status: in-qa"               → QA 검문 대기열
+label:"status: awaiting-approval"   → 내 승인 대기열
+label:"type: bug"                   → 버그만
 ```
 
 ---

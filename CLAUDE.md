@@ -27,6 +27,17 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 > CI는 `main`, `dev`, `feature/*` 브랜치에서 모두 실행된다 (`.github/workflows/ci.yml`).
 
+## 이슈 라벨 (신호등)
+
+이슈 라벨은 에이전트 루프가 읽는 신호다. 전체 규약은 **`docs/github-labels.md`**(SSOT)에 정의되어 있으며, 라벨을 붙이거나 바꿀 때는 이 규칙을 따른다.
+
+- **진행 신호** — 한 이슈에 **동시에 하나만**. 바꿀 때는 이전 것을 떼고 새 것을 붙인다 (두 개가 같이 붙으면 루프가 중복 출발한다).
+  `status: needs-triage`(새 이슈 접수) → `agent: ready`(Planner 다듬기 완료 · 구현 루프 출발 신호) → `status: in-progress`(작업 중) → `status: in-review`(PR 올라감 · 코드 리뷰) → `status: in-security`(보안 검수) → `status: in-qa`(QA 검문) → `status: awaiting-approval`(승인 대기) → `status: done`(머지 완료)
+- **검증은 한 방향** — 코드 리뷰 → 보안 → QA 순서로만 흐른다. 어느 검문소에서 반려되든 `status: in-progress`로 돌아가고, 다시 올라온 PR은 `status: in-review`부터 전 검문소를 다시 통과한다.
+- **종류 스티커** — 여러 개 붙어도 됨: `type: bug` · `type: feature` · `type: polish`
+- **Planner 루프**는 `status: needs-triage`를 `agent: ready`로 교체한다. **구현 루프**는 `agent: ready` → `status: in-progress` → PR 후 `status: in-review`로 교체한다. **코드 리뷰어**는 `status: in-review`, **보안 검수원**은 `status: in-security`, **QA**는 `status: in-qa`를 보고, 통과 시 다음 검문소로 넘긴다.
+- 라벨 교체는 한 명령으로: `gh issue edit <번호> --add-label "<새 라벨>" --remove-label "<옛 라벨>"`
+
 ## 명령어
 
 패키지 매니저는 **pnpm**을 사용한다 (`pnpm-lock.yaml`, `pnpm-workspace.yaml` 존재).
